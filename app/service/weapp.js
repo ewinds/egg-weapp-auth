@@ -165,7 +165,7 @@ class WeappService extends Service {
     if (!openId)
       throw new Error(ERRORS.DBERR.ERR_NO_OPENID_ON_CALL_GETUSERINFOFUNCTION);
 
-    return await app.mysql.get("cSessionInfo", { open_id: openId });
+    return await app.mysql.get("csessioninfo", { open_id: openId });
   }
   /**
    * 通过 skey 获取用户信息
@@ -177,7 +177,7 @@ class WeappService extends Service {
     if (!skey)
       throw new Error(ERRORS.DBERR.ERR_NO_SKEY_ON_CALL_GETUSERINFOFUNCTION);
 
-    return await app.mysql.get("cSessionInfo", { skey });
+    return await app.mysql.get("csessioninfo", { skey });
   }
   /**
    * 储存用户信息
@@ -192,7 +192,7 @@ class WeappService extends Service {
 
     try {
       // 查重并决定是插入还是更新数据
-      const hasUser = await app.mysql.count("cSessionInfo", { open_id });
+      const hasUser = await app.mysql.count("csessioninfo", { open_id });
 
       // 如果存在用户则更新
       if (hasUser) {
@@ -202,7 +202,7 @@ class WeappService extends Service {
           session_key,
           user_info
         };
-        await app.mysql.update("cSessionInfo", row, { where: { open_id } });
+        await app.mysql.update("csessioninfo", row, { where: { open_id } });
       } else {
         const row = {
           uuid,
@@ -213,7 +213,7 @@ class WeappService extends Service {
           session_key,
           user_info
         };
-        await app.mysql.insert("cSessionInfo", row);
+        await app.mysql.insert("csessioninfo", row);
       }
 
       return {
